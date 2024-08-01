@@ -3,7 +3,7 @@ require("./src/db/connect");
 require("dotenv").config();
 
 const CityRouter = require("./src/router/City.Router");
-const UserRouter = require("./src/router/User.Router");
+const AuthenticationRouter = require("./src/router/Authentication.Router");
 const AdventureRouter = require("./src/router/Adventure.Router");
 const AdventureDetailRouter = require("./src/router/AdventureDetail.Router");
 
@@ -14,7 +14,7 @@ const server = express();
 server.use(express.json());
 
 server.use("/cities", CityRouter);
-server.use("/user", UserRouter);
+server.use("/auth", AuthenticationRouter);
 server.use("/adventure/detail", AdventureDetailRouter);
 server.use("/adventure", AdventureRouter);
 

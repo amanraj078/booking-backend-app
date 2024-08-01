@@ -1,9 +1,25 @@
 const { createNewUserInDbService } = require("../service/User.Service");
+const bcrypt = require("bcrypt");
 
 async function CreateNewUserController(req, res) {
     try {
         const { name, email, password } = req.body;
-        const result = await createNewUserInDbService(name, email, password);
+        if (!name || !email || !password) {
+            res.status(404).json({
+                success: false,
+                message: "email, name or password is required",
+            });
+            return;
+        }
+
+        const SALT = bcrypt.genSaltSync(10);
+        const encryptedPassword = bcrypt.hashSync(password, SALT);
+
+        const result = await createNewUserInDbService(
+            name,
+            email,
+            encryptedPassword
+        );
 
         if (!result.success) {
             throw new Error("createNewUserInDbService failed to complete task");
@@ -11,7 +27,7 @@ async function CreateNewUserController(req, res) {
         // console.log(req.body);
         res.status(201).json({
             success: true,
-            data: result.data,
+            message: "user registered successfully",
         });
     } catch (error) {
         console.log(error);

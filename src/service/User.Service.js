@@ -1,17 +1,19 @@
 const UserModel = require("../model/User.Model");
 
-async function createNewUserInDbService(name, email, password) {
+async function createNewUserInDbService(name, email, encryptedPassword) {
     try {
         const result = await UserModel.create({
             name,
             email,
-            password,
+            password: encryptedPassword,
         });
         if (result) {
             return {
                 success: true,
                 data: result,
             };
+        } else {
+            throw new Error("createNewUserInDbService unable to create user");
         }
     } catch (error) {
         console.log(error);
