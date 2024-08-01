@@ -115,8 +115,8 @@ async function UpdateAdventureController(req, res) {
 
 async function DeleteAdventureController(req, res) {
     try {
-        const { id: cityId } = req.query;
-        const result = await DeleteAdventureInDbService(cityId);
+        const { id: AdventureId } = req.query;
+        const result = await DeleteAdventureInDbService(AdventureId);
 
         if (result.success) {
             res.status(200).json({
