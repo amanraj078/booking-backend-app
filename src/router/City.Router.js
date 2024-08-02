@@ -5,10 +5,13 @@ const {
     UpdateCityController,
     DeleteCityController,
 } = require("../controller/City.Controller");
+const {
+    AdminAuthorizationMiddleware,
+} = require("../middleware/Authorization.Middleware");
 
 const CityRouter = express.Router();
 
-CityRouter.post("/add", CreateNewCityController);
+CityRouter.post("/add", AdminAuthorizationMiddleware, CreateNewCityController);
 CityRouter.get("/all", GetAllTheCitiesController);
 CityRouter.put("/update", UpdateCityController);
 CityRouter.delete("/delete", DeleteCityController);

@@ -1,6 +1,9 @@
 const express = require("express");
 require("./src/db/connect");
 require("dotenv").config();
+const {
+    RequestPathAndMethodLoggerMiddleware,
+} = require("./src/middleware/Logger.Middleware");
 
 const CityRouter = require("./src/router/City.Router");
 const AuthenticationRouter = require("./src/router/Authentication.Router");
@@ -12,6 +15,8 @@ const nodeEnv = process.env.NODE_ENV;
 const server = express();
 
 server.use(express.json());
+
+server.use(RequestPathAndMethodLoggerMiddleware);
 
 server.use("/cities", CityRouter);
 server.use("/auth", AuthenticationRouter);
