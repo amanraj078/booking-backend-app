@@ -7,10 +7,18 @@ const {
     SearchAdventureController,
 } = require("../controller/Adventure.controller");
 
+const {
+    AdminAuthorizationMiddleware,
+} = require("../middleware/Authorization.Middleware");
+
 const AdventureRouter = express.Router();
 
 AdventureRouter.get("/all", GetAllAdventureController);
-AdventureRouter.post("/add", CreateNewAdventureController);
+AdventureRouter.post(
+    "/add",
+    AdminAuthorizationMiddleware,
+    CreateNewAdventureController
+);
 AdventureRouter.put("/update", UpdateAdventureController);
 AdventureRouter.delete("/delete", DeleteAdventureController);
 AdventureRouter.get("/search", SearchAdventureController);

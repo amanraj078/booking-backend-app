@@ -21,6 +21,7 @@ async function AdminAuthorizationMiddleware(req, res, next) {
         const { role } = result.data;
 
         if (role == "admin") {
+            req.userId = userId;
             next();
         } else {
             throw new Error();
@@ -34,6 +35,32 @@ async function AdminAuthorizationMiddleware(req, res, next) {
     }
 }
 
+async function CustomerAuthorizationMiddleware(req, res, next) {
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const payload = jwt.verify(token, jwt_secret_key);
+        const { userId: userId } = payload;
+        const result = await getUserByUserIdFromDbService(userId);
+        if (!result.success) {
+            throw new Error();
+        }
+        const { role } = result.data;
+        if (role === "customer") {
+            req.userId = userId;
+            next();
+        } else {
+            throw new Error();
+        }
+    } catch (error) {
+        console.log(err);
+        response.status(err.status ? err.status : 500).json({
+            success: false,
+            message: err.status ? err.message : "Something went to wrong",
+        });
+    }
+}
+
 module.exports = {
     AdminAuthorizationMiddleware,
+    CustomerAuthorizationMiddleware,
 };

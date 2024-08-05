@@ -9,6 +9,7 @@ const CityRouter = require("./src/router/City.Router");
 const AuthenticationRouter = require("./src/router/Authentication.Router");
 const AdventureRouter = require("./src/router/Adventure.Router");
 const AdventureDetailRouter = require("./src/router/AdventureDetail.Router");
+const ReservationRouter = require("./src/router/Reservation.Router");
 
 const PORT = process.env.PORT;
 const nodeEnv = process.env.NODE_ENV;
@@ -22,6 +23,7 @@ server.use("/cities", CityRouter);
 server.use("/auth", AuthenticationRouter);
 server.use("/adventure/detail", AdventureDetailRouter);
 server.use("/adventure", AdventureRouter);
+server.use("/reservations", ReservationRouter);
 
 //api that are not defined will go here
 server.use("*", (req, res) => {

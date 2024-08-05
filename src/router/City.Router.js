@@ -13,7 +13,7 @@ const CityRouter = express.Router();
 
 CityRouter.post("/add", AdminAuthorizationMiddleware, CreateNewCityController);
 CityRouter.get("/all", GetAllTheCitiesController);
-CityRouter.put("/update", UpdateCityController);
+CityRouter.put("/update", AdminAuthorizationMiddleware, UpdateCityController);
 CityRouter.delete("/delete", DeleteCityController);
 
 module.exports = CityRouter;

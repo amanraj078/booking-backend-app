@@ -32,6 +32,59 @@ async function CreateAdventureDetailInDbService(
     }
 }
 
+async function BookSlotForAdventureInDBService(
+    adventureId,
+    date,
+    numberOfPerson
+) {
+    try {
+        const AdventureResult = await AdventureDetailModel.findOne({
+            adventureId,
+        });
+
+        if (!AdventureResult) {
+            throw new Error(
+                "CheckSlotAvailibiltyForAdventureInDBService unable to get any adventure with given adventureId"
+            );
+        }
+
+        const { slots } = AdventureResult;
+
+        const slotIndex = slots.findIndex(
+            (slot) => new Date(slot.date).getTime() === new Date(date).getTime()
+        );
+
+        if (slotIndex === -1) {
+            throw new Error("Slot is not available for the given date");
+        }
+
+        const bookingSlot = slots[slotIndex];
+
+        if (bookingSlot.numberOfPerson < numberOfPerson) {
+            throw new Error("Slot is not available for the given capacity");
+        }
+
+        if (bookingSlot.numberOfPerson - numberOfPerson == 0) {
+            slots.splice(slotIndex, 1);
+        } else {
+            slots[slotIndex].numberOfPerson =
+                bookingSlot.numberOfPerson - numberOfPerson;
+        }
+
+        await AdventureResult.save();
+
+        return {
+            success: true,
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+        };
+    }
+}
+
 module.exports = {
     CreateAdventureDetailInDbService,
+    BookSlotForAdventureInDBService,
 };
